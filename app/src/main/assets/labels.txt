@@ -1,4 +1,5 @@
 Boys Hostel
+CIDS
 Computer science and Engineer
 Health Care Center
 Mathematical and Computational Science
