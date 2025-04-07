@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.majorproject"
-        minSdk = 26
+        minSdk = 27
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
@@ -65,7 +65,7 @@ dependencies {
     implementation("io.coil-kt.coil3:coil-compose:3.1.0")
 
 
-    // TensorFlow Lite LiteRT (Optimized Runtime)
+//    // TensorFlow Lite LiteRT (Optimized Runtime)
 //    implementation("org.tensorflow:tensorflow-lite-runtime:2.13.0")
 //
 //    // TensorFlow Lite Support Library (for easy pre/post-processing)

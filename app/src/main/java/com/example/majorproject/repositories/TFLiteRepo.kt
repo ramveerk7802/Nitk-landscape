@@ -1,14 +1,12 @@
 package com.example.majorproject.repositories
 
 import android.content.Context
+import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.Log
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 import org.tensorflow.lite.Interpreter
-import java.io.File
 import java.io.FileInputStream
 import java.io.InputStream
 import java.nio.ByteBuffer
@@ -18,8 +16,8 @@ import java.nio.channels.FileChannel
 
 class TFLiteRepo(private val context: Context) {
     private var interpreter :Interpreter?=null
-    private val imgWidth = 224
-    private val imgHeight = 224
+    private val imgWidth = 256
+    private val imgHeight = 256
     private val channels = 3
     private lateinit var labels:List<String>
 
@@ -27,7 +25,7 @@ class TFLiteRepo(private val context: Context) {
 
     suspend fun loadModel(){
         Log.d("Test","Model loading start")
-        val modelBuffer = loadModelFile("updated_nitk.tflite")
+        val modelBuffer = loadModelFile("update_nitkk.tflite")
         val options = Interpreter.Options().apply {
             setUseNNAPI(false)
         }
@@ -46,6 +44,8 @@ class TFLiteRepo(private val context: Context) {
         Log.d("Test","Model loading finish")
 
     }
+
+
 
     private suspend fun loadLabel():List<String>{
 //        return context.assets.open("labels.txt").bufferedReader().useLines { it.toList() }
@@ -95,7 +95,7 @@ class TFLiteRepo(private val context: Context) {
         val resultIndex = outputArray[0].indices.maxByOrNull { outputArray[0][it] } ?: return Pair("Unknown", 0f)
         val confidence = outputArray[0][resultIndex]
 //        return Pair(labels[resultIndex],confidence)
-        return if(confidence>=0.5) Pair(labels[resultIndex],confidence) else Pair("Unknown",0f)
+        return if(confidence>=0.45) Pair(labels[resultIndex],confidence) else Pair("Unknown",0f)
 //
 //        Log.d("Test","In Repo after interPreter : confidence : $confidence")
 //            val prediction = labels.zip(outputArray[0].toList())
@@ -141,6 +141,8 @@ class TFLiteRepo(private val context: Context) {
         return byteBuffer
 
     }
+
+
 
 
 
