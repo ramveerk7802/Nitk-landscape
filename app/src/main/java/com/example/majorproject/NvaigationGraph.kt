@@ -5,7 +5,8 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.majorproject.Utilities.Destination
-import com.example.majorproject.views.MainScreen
+import com.example.majorproject.views.HomeScreen
+import com.example.majorproject.views.SplashScreen
 
 
 @Composable
@@ -13,11 +14,15 @@ fun NavigationGraph(navController: NavHostController){
 
     NavHost(
         navController = navController,
-        startDestination = Destination.Main
+        startDestination = Destination.Splash
     ){
-        composable<Destination.Main> {
-            MainScreen()
+        composable<Destination.Splash> {
+            SplashScreen(navHostController = navController)
         }
+        composable<Destination.Home> {
+            HomeScreen(navHostController = navController)
+        }
+
     }
 
 }

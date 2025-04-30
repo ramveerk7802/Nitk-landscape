@@ -25,7 +25,7 @@ class TFLiteRepo(private val context: Context) {
 
     suspend fun loadModel(){
         Log.d("Test","Model loading start")
-        val modelBuffer = loadModelFile("update_nitkk.tflite")
+        val modelBuffer = loadModelFile("updated_nitk.tflite")
         val options = Interpreter.Options().apply {
             setUseNNAPI(false)
         }
@@ -95,7 +95,7 @@ class TFLiteRepo(private val context: Context) {
         val resultIndex = outputArray[0].indices.maxByOrNull { outputArray[0][it] } ?: return Pair("Unknown", 0f)
         val confidence = outputArray[0][resultIndex]
 //        return Pair(labels[resultIndex],confidence)
-        return if(confidence>=0.45) Pair(labels[resultIndex],confidence) else Pair("Unknown",0f)
+        return if(confidence>=0.6) Pair(labels[resultIndex],confidence) else Pair("Unknown",0f)
 //
 //        Log.d("Test","In Repo after interPreter : confidence : $confidence")
 //            val prediction = labels.zip(outputArray[0].toList())

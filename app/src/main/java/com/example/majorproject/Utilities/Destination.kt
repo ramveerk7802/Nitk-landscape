@@ -6,4 +6,10 @@ class Destination {
 
     @Serializable
     data object Main
+
+    @Serializable
+    data object Splash
+
+    @Serializable
+    data object Home
 }
