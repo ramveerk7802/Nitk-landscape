@@ -381,6 +381,7 @@ fun ResultView(label:String,confidence:Float){
                 horizontalArrangement = Arrangement.SpaceAround
             ){
                 Text(
+                    modifier = Modifier.fillMaxWidth(0.7f),
                     text = label,
                     style = MaterialTheme.typography.bodyMedium,
 
