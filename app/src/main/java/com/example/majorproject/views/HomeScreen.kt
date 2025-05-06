@@ -16,9 +16,15 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
@@ -54,6 +60,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -69,11 +76,11 @@ import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(navHostController: NavHostController){
+fun HomeScreen(navHostController: NavHostController) {
 
     val context = LocalContext.current
 
-    val myViewModel : TFLiteViewModel = viewModel(factory = TFLiteViewModelFactory(context))
+    val myViewModel: TFLiteViewModel = viewModel(factory = TFLiteViewModelFactory(context))
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     var selectedNavigation by remember { mutableStateOf(0) }
@@ -82,9 +89,9 @@ fun HomeScreen(navHostController: NavHostController){
 
     ModalNavigationDrawer(
         drawerContent = {
-            ModalDrawerSheet (
+            ModalDrawerSheet(
                 modifier = Modifier.fillMaxWidth(0.8f)
-            ){
+            ) {
                 MyHeader()
                 Spacer(modifier = Modifier.height(16.dp))
                 DrawerNavigationItem.list.forEachIndexed { index, item ->
@@ -93,31 +100,35 @@ fun HomeScreen(navHostController: NavHostController){
                             Text(text = item.title)
                         },
                         onClick = {
-                            selectedNavigation =index
+                            selectedNavigation = index
                             scope.launch {
                                 drawerState.close()
                             }
-                            when(index){
-                                0 ->{
-                                    if(selectedNavigation!=0){
-                                        navHostController.navigate(Destination.Home){
-                                            popUpTo<Destination.Home>{
-                                                inclusive= true
+                            when (index) {
+                                0 -> {
+                                    if (selectedNavigation != 0) {
+                                        navHostController.navigate(Destination.Home) {
+                                            popUpTo<Destination.Home> {
+                                                inclusive = true
                                             }
                                         }
                                     }
                                 }
-                                1->{
-                                        showNitkVisitBottomSheet.value= true
+
+                                1 -> {
+                                    showNitkVisitBottomSheet.value = true
                                 }
-                                2-> {
+
+                                2 -> {
                                     shareApp(context)
                                 }
-                                3->{
-                                    showPrivacyDialog.value =true
+
+                                3 -> {
+                                    showPrivacyDialog.value = true
                                 }
-                                else ->{
-                                    scope.launch { 
+
+                                else -> {
+                                    scope.launch {
                                         drawerState.close()
                                     }
                                 }
@@ -138,8 +149,8 @@ fun HomeScreen(navHostController: NavHostController){
 
         },
         drawerState = drawerState
-    ){
-        Scaffold (
+    ) {
+        Scaffold(
             topBar = {
                 TopAppBar(
                     modifier = Modifier.background(
@@ -148,7 +159,7 @@ fun HomeScreen(navHostController: NavHostController){
                         )
                     ),
                     title = {
-                        Text( text = "Campus Eye")
+                        Text(text = "Campus Eye")
                     },
                     navigationIcon = {
                         IconButton(
@@ -157,7 +168,7 @@ fun HomeScreen(navHostController: NavHostController){
                                     drawerState.open()
                                 }
                             }
-                        ){
+                        ) {
                             Icon(
                                 imageVector = Icons.Default.Menu,
                                 contentDescription = ""
@@ -171,15 +182,15 @@ fun HomeScreen(navHostController: NavHostController){
                     )
                 )
             }
-        ){
-            MainContent(Modifier.padding(it),myViewModel,context)
+        ) {
+            MainContent(Modifier.padding(it), myViewModel, context)
         }
 
-        if(showPrivacyDialog.value){
+        if (showPrivacyDialog.value) {
             PrivacyAndPolicyDialog(showDialog = showPrivacyDialog)
         }
 
-        if(showNitkVisitBottomSheet.value){
+        if (showNitkVisitBottomSheet.value) {
             NitkBottomSheet(showBottomSheet = showNitkVisitBottomSheet, context = context)
         }
     }
@@ -195,13 +206,13 @@ fun shareApp(context: Context) {
         )
         type = "text/Plain"
     }
-    context.startActivity(Intent.createChooser(intent,"Share Campus Eye via"))
+    context.startActivity(Intent.createChooser(intent, "Share Campus Eye via"))
 
 }
 
 
 @Composable
-fun MyHeader(){
+fun MyHeader() {
     Box(
         modifier = Modifier
             .height(140.dp)
@@ -212,12 +223,12 @@ fun MyHeader(){
                 )
             )
             .padding(16.dp)
-    ){
-        Row (
+    ) {
+        Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceEvenly
-        ){
+        ) {
             AsyncImage(
                 model = R.drawable.nitk_logo,
                 contentDescription = "",
@@ -234,55 +245,56 @@ fun MyHeader(){
 
 
 @Composable
-fun MainContent(modifier: Modifier,viewModel: TFLiteViewModel,context: Context){
-    Box(
+fun MainContent(modifier: Modifier, viewModel: TFLiteViewModel, context: Context) {
+//    Box(
+//        modifier = modifier,
+//        contentAlignment = Alignment.Center
+//    ){
+    App(
         modifier = modifier,
-        contentAlignment = Alignment.Center
-    ){
-        App(
-            modifier = modifier,
-            myViewModel = viewModel,
-            context = context
-        )
-    }
+        myViewModel = viewModel,
+        context = context
+    )
+//    }
 }
 
 
-
-
 @Composable
-fun App(modifier: Modifier,myViewModel:TFLiteViewModel,context: Context) {
+fun App(modifier: Modifier, myViewModel: TFLiteViewModel, context: Context) {
     val predictResult = myViewModel.predictedResult.observeAsState().value
+    val historyLiveData = myViewModel.historyLiveData.observeAsState().value
     val isLoadModel = myViewModel.isLoadModel.observeAsState(false).value
     val isProcess = myViewModel.isProcess.observeAsState(false).value
     var imageUri by remember { mutableStateOf("") }
     var imageSelect by remember { mutableStateOf(false) }
 
     val galleryLauncher =
-        rememberLauncherForActivityResult(contract = ActivityResultContracts.PickVisualMedia()) { uri->
+        rememberLauncherForActivityResult(contract = ActivityResultContracts.PickVisualMedia()) { uri ->
             uri?.let {
-                imageUri=it.toString()
+                imageUri = it.toString()
             }
 
         }
     Column(
-        modifier = modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(16.dp),
+        modifier = modifier.padding(16.dp)
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState()),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-        if(isLoadModel){
+        if (isLoadModel) {
             Box(
                 modifier = Modifier.fillMaxSize(),
                 contentAlignment = Alignment.Center
-            ){
-                Column (
+            ) {
+                Column(
                     modifier = Modifier.fillMaxWidth(),
                     verticalArrangement = Arrangement.spacedBy(16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
-                ){
+                ) {
                     Text(
-                        text =  "Loading Nitk LandScape model..."
+                        text = "Loading Nitk LandScape model..."
                     )
                     CircularProgressIndicator()
                 }
@@ -294,57 +306,81 @@ fun App(modifier: Modifier,myViewModel:TFLiteViewModel,context: Context) {
             model = imageUri.ifEmpty { R.drawable.upload_icon },
             contentDescription = "Test Image",
             modifier = Modifier.size(
-                width = 300.dp,
-                height = 300.dp
+                width = 280.dp,
+                height = 280.dp
             ).clickable {
                 galleryLauncher.launch(
                     PickVisualMediaRequest(
-                    ActivityResultContracts.PickVisualMedia.ImageOnly
-                )
+                        ActivityResultContracts.PickVisualMedia.ImageOnly
+                    )
                 )
             }
 
         )
 
-        if(!isProcess){
+        if (!isProcess) {
             Button(
                 onClick = {
-                    if(imageUri.isBlank()){
-                        imageSelect=true
-                    }
-                    else{
-                        imageSelect=false
+                    if (imageUri.isBlank()) {
+                        imageSelect = true
+                    } else {
+                        imageSelect = false
                         myViewModel.classifyImage(imagePath = imageUri)
                     }
 
 
                 }
-            ){
+            ) {
                 Text(
                     text = "Predict"
                 )
             }
-        }
-        else{
+        } else {
             CircularProgressIndicator()
         }
 
         predictResult?.let {
             ResultView(label = it.first, confidence = it.second)
         }
-    if(imageSelect)
-        Text(text = "Select the Image")
+        if (imageSelect)
+            Text(text = "Select the Image")
+
+        historyLiveData?.let {
+
+            val history = it.reversed()
+            if(history.size>1){
+                Text(text = "History",
+                    modifier = Modifier.align(Alignment.Start),
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.ExtraBold,
+                    textAlign = TextAlign.Start
+                )
+                LazyColumn (
+                    modifier = Modifier.fillMaxWidth().height(260.dp),
+                    verticalArrangement = Arrangement.spacedBy(10.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ){
+                    itemsIndexed(history){index,item->
+                        if(index!=0){
+                            ResultView(label = item.first, confidence = item.second)
+                        }
+                    }
+
+                }
+            }
+        }
+
     }
+
 
 }
 
 
-
 @Composable
-fun ResultView(label:String,confidence:Float){
+fun ResultView(label: String, confidence: Float) {
 
-    Surface (
-        modifier = Modifier.fillMaxWidth().padding(20.dp),
+    Surface(
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp),
         shape = RoundedCornerShape(16.dp),
         border = BorderStroke(
             width = 2.dp,
@@ -352,22 +388,22 @@ fun ResultView(label:String,confidence:Float){
         ),
         tonalElevation = 2.dp,
         shadowElevation = 2.dp
-    ){
-        Column (
+    ) {
+        Column(
             modifier = Modifier.fillMaxWidth().padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp),
             horizontalAlignment = Alignment.CenterHorizontally
-        ){
-            Row (
+        ) {
+            Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceAround
-            ){
+            ) {
                 Text(
                     text = "Label name",
                     style = MaterialTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold
-                    )
+                )
                 Text(
                     text = "Confidence",
                     style = MaterialTheme.typography.titleMedium,
@@ -375,22 +411,22 @@ fun ResultView(label:String,confidence:Float){
                 )
             }
 
-            Row (
+            Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceAround
-            ){
+            ) {
                 Text(
                     modifier = Modifier.fillMaxWidth(0.7f),
                     text = label,
                     style = MaterialTheme.typography.bodyMedium,
 
-                )
+                    )
                 Text(
                     text = "$confidence",
                     style = MaterialTheme.typography.bodyMedium,
 
-                )
+                    )
             }
         }
     }

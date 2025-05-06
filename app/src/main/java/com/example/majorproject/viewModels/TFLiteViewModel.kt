@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.majorproject.repositories.TFLiteRepo
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -25,6 +26,9 @@ class TFLiteViewModel(context: Context) : ViewModel(){
     private val _isProcess = MutableLiveData<Boolean>(false)
     val isProcess : LiveData<Boolean> get() = _isProcess
 
+    private val _historyMutableLiveData = MutableLiveData<List<Pair<String,Float>>>()
+    val historyLiveData : LiveData<List<Pair<String,Float>>> get() = _historyMutableLiveData
+
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -34,37 +38,23 @@ class TFLiteViewModel(context: Context) : ViewModel(){
             _isLoadModel.postValue(false)
         }
     }
-//    fun resetResult(){
-//        _predictedResult.postValue(null)
-//    }
-//    fun classifyImage(imagePath:String,onFailure:(String)->Unit){
-//        viewModelScope.launch {
-//            _isProcess.postValue(true)
-//            Log.d("Test","Classify function called in View Model")
-//
-//            val result = withContext(Dispatchers.IO){
-//                Log.d("Test","Classify function called in Dispatcher")
-//                repo.runInference(imagePath = imagePath)
-//
-//            }
-//            Log.d("Test","Classify function called in after run inference")
-//            if(result==null){
-//                _isProcess.postValue(false)
-//                onFailure("Not detected")
-//            }
-//            result?.let {
-//                Log.d("Test","Classify function called in result")
-//                _predictedResult.postValue(it)
-//            }
-//            _isProcess.postValue(false)
-//
-//        }
-//    }
+
+    fun addInHistory(data : Pair<String,Float>){
+        viewModelScope.launch {
+            withContext(Dispatchers.IO){
+                val currentHistory = _historyMutableLiveData.value?.toMutableList()?: mutableListOf()
+                currentHistory.add(data)
+                _historyMutableLiveData.postValue(currentHistory)
+            }
+        }
+    }
+
 
     fun classifyImage(imagePath:String){
         viewModelScope.launch(Dispatchers.IO) {
             _isProcess.postValue(true)
             val result = repo.classifyImage(imagePath)
+            addInHistory(result)
             _predictedResult.postValue(result)
             _isProcess.postValue(false)
         }
