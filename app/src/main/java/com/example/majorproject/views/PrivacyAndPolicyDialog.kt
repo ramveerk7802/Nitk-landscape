@@ -23,11 +23,8 @@ import androidx.compose.ui.window.Dialog
 
 @Composable
 fun PrivacyAndPolicyDialog(showDialog: MutableState<Boolean>){
-
-    Dialog(
-        onDismissRequest = { showDialog.value = false}
-    ){
-        Surface(
+    Dialog(onDismissRequest = { showDialog.value = false}
+    ){ Surface(
             shape = RoundedCornerShape(16.dp),
             color = MaterialTheme.colorScheme.background,
             tonalElevation = 8.dp,
@@ -45,19 +42,13 @@ fun PrivacyAndPolicyDialog(showDialog: MutableState<Boolean>){
                     text = "Privacy Policy",
                     style = MaterialTheme.typography.headlineSmall,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.padding(bottom = 8.dp)
-                )
-
+                    modifier = Modifier.padding(bottom = 8.dp))
                 Text(
                     text = "This is the privacy policy of Campus Eye. We collect no personal data. This app respects your privacy and only stores data locally unless otherwise noted. Further enhancements will comply with standard data protection practices.",
                     style = MaterialTheme.typography.bodyMedium,
-                    modifier = Modifier.padding(bottom = 16.dp)
-                )
-
+                    modifier = Modifier.padding(bottom = 16.dp))
                 TextButton(
-                    onClick = {
-                        showDialog.value = false
-                    }
+                    onClick = { showDialog.value = false }
                 ){
                     Text(text = "Close")
                 }

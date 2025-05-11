@@ -61,6 +61,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -77,9 +78,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(navHostController: NavHostController) {
-
     val context = LocalContext.current
-
     val myViewModel: TFLiteViewModel = viewModel(factory = TFLiteViewModelFactory(context))
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val scope = rememberCoroutineScope()
@@ -202,7 +201,7 @@ fun shareApp(context: Context) {
         action = Intent.ACTION_SEND
         putExtra(
             Intent.EXTRA_TEXT,
-            "Check out Campus Eye – a smart app for NITK students!"
+            "https://drive.google.com/file/d/1Vqys57_HMkRbvm-iOlljo_8aB31Kdl8w/view?usp=sharing"
         )
         type = "text/Plain"
     }
@@ -222,7 +221,8 @@ fun MyHeader() {
                     colors = listOf(GRADIENT_COLOR_1, GRADIENT_COLOR_2) // Purple to Blue Gradient
                 )
             )
-            .padding(16.dp)
+            .padding(16.dp),
+        contentAlignment = Alignment.Center
     ) {
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -232,7 +232,9 @@ fun MyHeader() {
             AsyncImage(
                 model = R.drawable.nitk_logo,
                 contentDescription = "",
-                colorFilter = ColorFilter.tint(color = Color.White)
+                colorFilter = ColorFilter.tint(color = Color.White),
+                modifier = Modifier.size(80.dp)
+
             )
             Text(
                 text = "Campus Eye",
@@ -246,16 +248,13 @@ fun MyHeader() {
 
 @Composable
 fun MainContent(modifier: Modifier, viewModel: TFLiteViewModel, context: Context) {
-//    Box(
-//        modifier = modifier,
-//        contentAlignment = Alignment.Center
-//    ){
+
     App(
         modifier = modifier,
         myViewModel = viewModel,
         context = context
     )
-//    }
+
 }
 
 
@@ -267,6 +266,8 @@ fun App(modifier: Modifier, myViewModel: TFLiteViewModel, context: Context) {
     val isProcess = myViewModel.isProcess.observeAsState(false).value
     var imageUri by remember { mutableStateOf("") }
     var imageSelect by remember { mutableStateOf(false) }
+
+
 
     val galleryLauncher =
         rememberLauncherForActivityResult(contract = ActivityResultContracts.PickVisualMedia()) { uri ->
@@ -309,6 +310,7 @@ fun App(modifier: Modifier, myViewModel: TFLiteViewModel, context: Context) {
                 width = 280.dp,
                 height = 280.dp
             ).clickable {
+
                 galleryLauncher.launch(
                     PickVisualMediaRequest(
                         ActivityResultContracts.PickVisualMedia.ImageOnly

@@ -22,7 +22,6 @@ import kotlinx.coroutines.delay
 
 @Composable
 fun SplashScreen(navHostController: NavHostController){
-
     LaunchedEffect(key1 = Unit){
         delay(3000)
         navHostController.navigate(Destination.Home){
@@ -31,9 +30,6 @@ fun SplashScreen(navHostController: NavHostController){
             }
         }
     }
-
-
-
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -45,14 +41,11 @@ fun SplashScreen(navHostController: NavHostController){
                 AsyncImage(
                     model = R.drawable.campus_logo,
                     contentDescription = "logo",
-                    modifier = Modifier.size(150.dp)
-                )
-
+                    modifier = Modifier.size(150.dp))
             Text(
                 text = "Campus Eye",
                 style = MaterialTheme.typography.headlineMedium,
-                color = MY_BLUE_COLOR
-            )
+                color = MY_BLUE_COLOR)
         }
     }
 }

@@ -25,16 +25,10 @@ import androidx.core.net.toUri
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NitkBottomSheet(showBottomSheet:MutableState<Boolean>, context: Context){
-
     val sheetState = rememberModalBottomSheetState()
-
-
     ModalBottomSheet(
-        onDismissRequest = {
-            showBottomSheet.value = false
-        },
+        onDismissRequest = { showBottomSheet.value = false },
         sheetState = sheetState,
-
     ){
         Column (
             modifier = Modifier
@@ -56,19 +50,10 @@ fun NitkBottomSheet(showBottomSheet:MutableState<Boolean>, context: Context){
             }
             Spacer(modifier = Modifier.height(16.dp))
             OutlinedButton(
-                onClick = {
-                    showBottomSheet.value= false
-                }
+                onClick = { showBottomSheet.value= false }
             ){
-                Text(
-                    text = "Cancel"
-                )
+                Text(text = "Cancel")
             }
-
-
         }
-
     }
-
-
 }
