@@ -7,6 +7,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -29,6 +30,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -294,12 +296,17 @@ fun App(modifier: Modifier, myViewModel: TFLiteViewModel, context: Context) {
         }
 
 
+
         AsyncImage(
             model = imageUri.ifEmpty { R.drawable.upload_icon },
             contentDescription = "Test Image",
             modifier = Modifier.size(
                 width = 280.dp,
                 height = 280.dp
+            ).border(
+                border = BorderStroke(width = 2.dp,
+                    color = Color.DarkGray),
+                shape = RoundedCornerShape(10.dp)
             ).clickable {
 
                 galleryLauncher.launch(
