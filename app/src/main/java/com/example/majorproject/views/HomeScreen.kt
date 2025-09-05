@@ -85,7 +85,6 @@ fun HomeScreen(navHostController: NavHostController) {
     var selectedNavigation by remember { mutableStateOf(0) }
     val showPrivacyDialog = remember { mutableStateOf(false) }
     val showNitkVisitBottomSheet = remember { mutableStateOf(false) }
-
     ModalNavigationDrawer(
         drawerContent = {
             ModalDrawerSheet(
@@ -145,7 +144,6 @@ fun HomeScreen(navHostController: NavHostController) {
                 }
 
             }
-
         },
         drawerState = drawerState
     ) {
@@ -184,11 +182,9 @@ fun HomeScreen(navHostController: NavHostController) {
         ) {
             MainContent(Modifier.padding(it), myViewModel, context)
         }
-
         if (showPrivacyDialog.value) {
             PrivacyAndPolicyDialog(showDialog = showPrivacyDialog)
         }
-
         if (showNitkVisitBottomSheet.value) {
             NitkBottomSheet(showBottomSheet = showNitkVisitBottomSheet, context = context)
         }
@@ -196,7 +192,6 @@ fun HomeScreen(navHostController: NavHostController) {
 }
 
 fun shareApp(context: Context) {
-
     val intent = Intent().apply {
         action = Intent.ACTION_SEND
         putExtra(
@@ -208,7 +203,6 @@ fun shareApp(context: Context) {
     context.startActivity(Intent.createChooser(intent, "Share Campus Eye via"))
 
 }
-
 
 @Composable
 fun MyHeader() {
@@ -245,7 +239,6 @@ fun MyHeader() {
     }
 }
 
-
 @Composable
 fun MainContent(modifier: Modifier, viewModel: TFLiteViewModel, context: Context) {
 
@@ -267,14 +260,12 @@ fun App(modifier: Modifier, myViewModel: TFLiteViewModel, context: Context) {
     var imageUri by remember { mutableStateOf("") }
     var imageSelect by remember { mutableStateOf(false) }
 
-
-
     val galleryLauncher =
-        rememberLauncherForActivityResult(contract = ActivityResultContracts.PickVisualMedia()) { uri ->
+        rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.PickVisualMedia()) { uri ->
             uri?.let {
                 imageUri = it.toString()
             }
-
         }
     Column(
         modifier = modifier.padding(16.dp)
@@ -323,23 +314,13 @@ fun App(modifier: Modifier, myViewModel: TFLiteViewModel, context: Context) {
         if (!isProcess) {
             Button(
                 onClick = {
-                    if (imageUri.isBlank()) {
-                        imageSelect = true
-                    } else {
+                    if (imageUri.isBlank()) { imageSelect = true } else {
                         imageSelect = false
                         myViewModel.classifyImage(imagePath = imageUri)
                     }
-
-
                 }
-            ) {
-                Text(
-                    text = "Predict"
-                )
-            }
-        } else {
-            CircularProgressIndicator()
-        }
+            ) { Text(text = "Predict") }
+        } else { CircularProgressIndicator() }
 
         predictResult?.let {
             ResultView(label = it.first, confidence = it.second)
@@ -373,8 +354,6 @@ fun App(modifier: Modifier, myViewModel: TFLiteViewModel, context: Context) {
         }
 
     }
-
-
 }
 
 

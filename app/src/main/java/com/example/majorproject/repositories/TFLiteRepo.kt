@@ -21,8 +21,6 @@ class TFLiteRepo(private val context: Context) {
     private val channels = 3
     private lateinit var labels:List<String>
 
-
-
     suspend fun loadModel(){
         Log.d("Test","Model loading start")
         val modelBuffer = loadModelFile("updated_nitk.tflite")
@@ -30,28 +28,12 @@ class TFLiteRepo(private val context: Context) {
             setUseNNAPI(false)
         }
         interpreter = Interpreter(modelBuffer, options)
-
-//        val inputTensor = interpreter?.getInputTensor(0)
-//        if (inputTensor != null) {
-//            val inputShape = inputTensor.shape()
-//            Log.d("Test", "Input Tensor Shape: ${inputShape.contentToString()}")
-//            Log.d("Test", "Input Tensor DataType: ${inputTensor.dataType()}")
-//        } else {
-//            Log.e("Test", "Input tensor is null")
-//        }
         labels = loadLabel()
 
         Log.d("Test","Model loading finish")
 
     }
 
-
-
-    private suspend fun loadLabel():List<String>{
-//        return context.assets.open("labels.txt").bufferedReader().useLines { it.toList() }
-        return context.assets.open("labels.txt").bufferedReader().readLines()
-
-    }
 
     private suspend fun loadModelFile(modelFileName: String): MappedByteBuffer {
         val fileDescriptor = context.assets.openFd(modelFileName)
@@ -61,29 +43,23 @@ class TFLiteRepo(private val context: Context) {
             }
         }
     }
+    private suspend fun loadLabel():List<String>{
+        return context.assets.open("labels.txt").bufferedReader().readLines()
+
+    }
 
     suspend fun classifyImage(imagePath: String):Pair<String,Float>{
         if(interpreter==null){
             return "Model not loaded" to   0f
         }
-//        val inputTensor = interpreter!!.getInputTensor(0)
-//        Log.d("Test", "Input Tensor Shape: ${inputTensor.shape().contentToString()}")
-//        Log.d("Test", "Input Tensor DataType: ${inputTensor.dataType()}")
-
-        Log.d("Test","ClassifyImage repo Function called")
-
+//        Log.d("Test","ClassifyImage repo Function called")
         val bitmap =loadBitmapFromUri(imagePath)
         if(bitmap==null){
             return Pair("Bitmap is Null", 0f)
         }
-
         val resizedBitmap = Bitmap.createScaledBitmap(bitmap,imgWidth,imgHeight,true)
-
         val inputBuffer =  convertBitmapToByteBuffer(resizedBitmap)
-
-
         val outputArray = Array(1){FloatArray(labels.size)}
-
             Log.d("Test","In Repo above interPreter")
         try {
             interpreter?.run(inputBuffer, outputArray)
@@ -91,7 +67,6 @@ class TFLiteRepo(private val context: Context) {
         } catch (e: Exception) {
             Log.e("Test", "Error during inference: ${e.message}")
         }
-
         val resultIndex = outputArray[0].indices.maxByOrNull { outputArray[0][it] } ?: return Pair("Unknown", 0f)
         val confidence = outputArray[0][resultIndex]
 //        return Pair(labels[resultIndex],confidence)
