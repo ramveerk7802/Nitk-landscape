@@ -59,3 +59,7 @@ It helps students, visitors, and researchers to easily identify important campus
 
 ## 📲 Ui Screenshot
 
+![image_alt](https://github.com/ramveerk7802/Nitk-landscape/blob/33f0e420e29c5f9e6086960c2bbcb337863a1bc1/combined-image.png)
+
+![image_alt](https://github.com/ramveerk7802/Nitk-landscape/blob/33f0e420e29c5f9e6086960c2bbcb337863a1bc1/combined-image%20(1).png)
+
